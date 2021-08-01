@@ -1,125 +1,120 @@
 import 'package:flutter/material.dart';
-
-class Product {
-  const Product({required this.name});
-
-  final String name;
-}
-
-typedef CartChangedCallback = Function(Product product, bool inCart);
-
-class ShoppingListItem extends StatelessWidget {
-  ShoppingListItem({
-    required this.product,
-    required this.inCart,
-    required this.onCartChanged,
-  }) : super(key: ObjectKey(product));
-
-  final Product product;
-  final bool inCart;
-  final CartChangedCallback onCartChanged;
-
-  Color _getColor(BuildContext context) {
-    // The theme depends on the BuildContext because different
-    // parts of the tree can have different themes.
-    // The BuildContext indicates where the build is
-    // taking place and therefore which theme to use.
-
-    return inCart //
-        ? Colors.black54
-        : Theme.of(context).primaryColor;
-  }
-
-  TextStyle? _getTextStyle(BuildContext context) {
-    if (!inCart) return null;
-
-    return const TextStyle(
-      color: Colors.black54,
-      decoration: TextDecoration.lineThrough,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () {
-        onCartChanged(product, inCart);
-      },
-      leading: CircleAvatar(
-        backgroundColor: _getColor(context),
-        child: Text(product.name[0]),
-      ),
-      title: Text(
-        product.name,
-        style: _getTextStyle(context),
-      ),
-    );
-  }
-}
-
-class ShoppingList extends StatefulWidget {
-  const ShoppingList({required this.products, Key? key}) : super(key: key);
-
-  final List<Product> products;
-
-  // The framework calls createState the first time
-  // a widget appears at a given location in the tree.
-  // If the parent rebuilds and uses the same type of
-  // widget (with the same key), the framework re-uses
-  // the State object instead of creating a new State object.
-
-  @override
-  _ShoppingListState createState() => _ShoppingListState();
-}
-
-class _ShoppingListState extends State<ShoppingList> {
-  final _shoppingCart = <Product>{};
-
-  void _handleCartChanged(Product product, bool inCart) {
-    setState(() {
-      // When a user changes what's in the cart, you need
-      // to change _shoppingCart inside a setState call to
-      // trigger a rebuild.
-      // The framework then calls build, below,
-      // which updates the visual appearance of the app.
-
-      if (!inCart) {
-        _shoppingCart.add(product);
-      } else {
-        _shoppingCart.remove(product);
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Shopping List'),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        children: widget.products.map((Product product) {
-          return ShoppingListItem(
-            product: product,
-            inCart: _shoppingCart.contains(product),
-            onCartChanged: _handleCartChanged,
-          );
-        }).toList(),
-      ),
-    );
-  }
-}
+// Uncomment lines 7 and 10 to view the visual layout at runtime.
+// import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
 
 void main() {
-  runApp(const MaterialApp(
-    title: 'Shopping App',
-    home: ShoppingList(
-      products: [
-        Product(name: 'Eggs'),
-        Product(name: 'Flour'),
-        Product(name: 'Chocolate chips'),
+  // debugPaintSizeEnabled = true;
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Widget titleSection = Container(
+      padding: const EdgeInsets.all(32),
+      child: Row(
+        children: [
+          Expanded(
+            /*1*/
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /*2*/
+                Container(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: const Text(
+                    'Oeschinen Lake Campground',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Text(
+                  'Kandersteg, Switzerland',
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          /*3*/
+          Icon(
+            Icons.star,
+            color: Colors.red[500],
+          ),
+          const Text('41'),
+        ],
+      ),
+    );
+
+    Color color = Theme.of(context).primaryColor;
+
+    Widget buttonSection = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildButtonColumn(color, Icons.call, 'CALL'),
+        _buildButtonColumn(color, Icons.near_me, 'ROUTE'),
+        _buildButtonColumn(color, Icons.share, 'SHARE'),
       ],
-    ),
-  ));
+    );
+
+    Widget textSection = const Padding(
+      padding: EdgeInsets.all(32),
+      child: Text(
+        'Lake Oeschinen lies at the foot of the Blüemlisalp in the Bernese '
+        'Alps. Situated 1,578 meters above sea level, it is one of the '
+        'larger Alpine Lakes. A gondola ride from Kandersteg, followed by a '
+        'half-hour walk through pastures and pine forest, leads you to the '
+        'lake, which warms to 20 degrees Celsius in the summer. Activities '
+        'enjoyed here include rowing, and riding the summer toboggan run.',
+        softWrap: true,
+      ),
+    );
+
+    return MaterialApp(
+      title: 'Flutter layout demo',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Flutter layout demo'),
+        ),
+        body: ListView(
+          children: [
+            // Image.asset(
+            //   'images/lake.jpg',
+            //   width: 600,
+            //   height: 240,
+            //   fit: BoxFit.cover,
+            // ),
+            titleSection,
+            buttonSection,
+            textSection,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Column _buildButtonColumn(Color color, IconData icon, String label) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(icon, color: color),
+        Container(
+          margin: const EdgeInsets.only(top: 8),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              color: color,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
