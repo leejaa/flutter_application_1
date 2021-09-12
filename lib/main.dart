@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_login/pages/home_page.dart';
-import 'package:flutter_login/pages/login_page.dart';
+import 'package:flutter_shoppingcart/components/shoppingcart_detail.dart';
+import 'package:flutter_shoppingcart/components/shoppingcart_header.dart';
+import 'package:flutter_shoppingcart/theme.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,22 +11,40 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-          textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          backgroundColor: Colors.black,
-          primary: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          minimumSize: Size(400, 60),
-        ),
-      )),
-      initialRoute: "/login",
-      routes: {
-        "/login": (context) => LoginPage(),
-        "/home": (context) => HomePage(),
-      },
+      theme: theme(),
+      home: ShoppingCartPage(),
     );
   }
+}
+
+class ShoppingCartPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: _buildShoppingCartAppBar(),
+      body: ListView(
+        children: [
+          ShoppingCartHeader(),
+          ShoppingCartDetail(),
+        ],
+      ),
+    );
+  }
+}
+
+AppBar _buildShoppingCartAppBar() {
+  return AppBar(
+    leading: IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {},
+    ),
+    actions: [
+      IconButton(
+        icon: Icon(Icons.shopping_cart),
+        onPressed: () {},
+      ),
+      SizedBox(width: 16),
+    ],
+    elevation: 0.0,
+  );
 }
