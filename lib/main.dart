@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_shoppingcart/components/shoppingcart_detail.dart';
-import 'package:flutter_shoppingcart/components/shoppingcart_header.dart';
-import 'package:flutter_shoppingcart/theme.dart';
+import 'package:flutter_kakao/screens/main_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,40 +9,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: theme(),
-      home: ShoppingCartPage(),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          elevation: 0.0,
+          backgroundColor: Colors.white,
+          textTheme: TextTheme(
+            headline6: TextStyle(color: Colors.black, fontSize: 24),
+          ),
+          iconTheme: IconThemeData(color: Colors.black),
+        ),
+      ),
+      home: MainScreen(),
     );
   }
-}
-
-class ShoppingCartPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildShoppingCartAppBar(),
-      body: ListView(
-        children: [
-          ShoppingCartHeader(),
-          ShoppingCartDetail(),
-        ],
-      ),
-    );
-  }
-}
-
-AppBar _buildShoppingCartAppBar() {
-  return AppBar(
-    leading: IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {},
-    ),
-    actions: [
-      IconButton(
-        icon: Icon(Icons.shopping_cart),
-        onPressed: () {},
-      ),
-      SizedBox(width: 16),
-    ],
-    elevation: 0.0,
-  );
 }

@@ -1,4 +1,4 @@
-name: flutter_shoppingcart
+name: flutter_kakao
 description: A new Flutter application.
 publish_to: "none"
 version: 1.0.0+1
@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   flutter_svg: ^0.22.0
+  intl: ^0.17.0
+  font_awesome_flutter: ^9.1.0
 
 dev_dependencies:
   flutter_test:
